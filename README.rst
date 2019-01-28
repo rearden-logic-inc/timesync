@@ -15,7 +15,7 @@ Installation
   source env/bin/activate
 
   # Install timesync application
-  pip install git+https://<Rest of the URL>
+  pip install pip install git+https://github.com/rerobins/timesync.git@master
 
 Configuration
 -------------
