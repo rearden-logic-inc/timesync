@@ -2,12 +2,12 @@
 Processes a script file of tasks.
 """
 import argparse
-import datetime
-import pkg_resources
-
-from timesync.utils import plugins
 
 from ruamel.yaml import YAML
+
+from timesync.utils import plugins
+from timesync.utils.configuration import parse_date
+
 
 def create_argument_parser(subparser):
     parser = subparser.add_parser('process', help='Process the contents of a script file')
@@ -32,7 +32,7 @@ def _main(args):
 
 def _copy_processor(configuration):
 
-    dates = [datetime.datetime.now()]
+    dates = parse_date(configuration)
 
     reader = plugins.load_plugin('timesheet_reader', configuration['from']['id'])
 
@@ -49,7 +49,7 @@ def _copy_processor(configuration):
 
 def _delete_process(configuration):
 
-    dates = [datetime.datetime.now()]
+    dates = parse_date(configuration)
 
     deleter = plugins.load_plugin('timesheet_delete', configuration['from']['id'])
 
