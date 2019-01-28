@@ -1,7 +1,7 @@
 Time Sync
 =========
 
-Tool that will sync the time record values between `Harvest API v2<https://help.getharvest.com/api-v2/>`_ and `T-Sheets API V1<https://developers.tsheets.com/docs/api/>`_.
+Tool that will sync the time record values between `Harvest API v2 <https://help.getharvest.com/api-v2/>`_ and `T-Sheets API V1 <https://developers.tsheets.com/docs/api/>`_.
 
 Installation
 ------------
@@ -10,6 +10,9 @@ Installation
 
   # Create new virtual environment
   python3 -m venv env
+
+  # Activate Virtual environment
+  source env/bin/activate
 
   # Install timesync application
   pip install git+https://<Rest of the URL>
@@ -27,7 +30,7 @@ This will require installing the API add-on and creating a new application for t
 Harvest Notes
 ~~~~~~~~~~~~~
 
-Configuration details for the harvest API, requires a token and account_id which can be found once you are logged into the harvest application.  Instructions can be found in the `API Authentication Instructions<https://help.getharvest.com/api-v2/authentication-api/authentication/authentication/#personal-access-tokens>`_.
+Configuration details for the harvest API, requires a ``token`` and ``account_id`` which can be found once you are logged into the harvest application.  Instructions can be found in the `API Authentication Instructions <https://help.getharvest.com/api-v2/authentication-api/authentication/authentication/#personal-access-tokens>`_.
 
 Configuration File
 ~~~~~~~~~~~~~~~~~~
@@ -58,6 +61,9 @@ Common Command Line Arguments
 -h
   Help information from the application
 
+-c CONFIG_FILE, --config=CONFIG_FILE
+  Specify an alternate configuration file for the application
+
 Task Assignment
 ~~~~~~~~~~~~~~~
 
@@ -87,7 +93,62 @@ Example Process File
 
 .. code-block:: yaml
 
-  TODO: Populate this
+  tasks:
+
+  # Tasks are executed in order that they are defined in this file, currently
+  # available tasks are 'delete', and 'copy'.  The delete command is provided
+  # so that values that may have been copied before are removed before copying
+  # values over.  If this is not required, then remove/comment out the task.
+
+  - type: delete
+    # Delete task will remove all of the values from the harvest project/task
+    # or the tsheets jobcode.
+    from:
+
+      # Required field that defines which API to use.   Currently only harvest
+      # deleter is supported.
+      id: harvest
+
+      # The following are required fields if the id is set to 'harvest'.  These
+      # values can be retrieved from the output of the task_assignment
+      # subcommand
+      project: 1
+      task: 2
+
+    # Date that time entries will be deleted.  This value can be: 'today',
+    # 'yesterday', 'range', or 'YYYY-MM-DD' value.  If 'range' is specified
+    # then additional fields 'start' and 'end' must also be defined.
+    date: today
+    # start: '2019-01-01'
+    # end: '2019-01-30'
+
+  - type: copy
+    # Copies the values from one API to another API.
+
+    from:
+
+      # Required field that defines the API to use for reading.  Currently
+      # only tsheets reader is supported.
+      id: tsheets
+
+      # Required field if the id is set to tsheets.  This value can be
+      # retrieved from the output of the task_assignment subcommand.
+      jobcode: 34
+
+    to:
+
+      # Required field that defines the API to use for writing.  Currently only
+      # harvest writer is supported.
+      id: harvest
+
+      # See documentation on these fields provided in the delete section.
+      project: 1
+      task: 2
+
+    # See the documentation on these fields provided in the delete section.
+    date: today
+    # start: '2019-01-01'
+    # end: '2019-01-30'
 
 Limitations
 -----------
