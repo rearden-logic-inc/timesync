@@ -14,10 +14,10 @@ with open(path.join(LOCAL_PATH, 'README.rst'), encoding='utf-8') as f:
 
 setup(
     name='timesync',
-    version='0.0.1',
+    version='0.1.0',
     packages=find_packages(),
-    url='',
-    license='',
+    url='https://github.com/rerobins/timesync',
+    license='Apache 2',
     author='Robert Robinson',
     author_email='rerobins@gmail.com',
     description='Time sheet synchronization tool.',
@@ -58,5 +58,7 @@ setup(
     },
 
     project_urls={
+        'Bug Reports': 'https://github.com/rerobins/timesync/issues',
+        'Source': 'https://github.com/rerobins/timesync',
     },
 )
