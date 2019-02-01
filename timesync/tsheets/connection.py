@@ -49,10 +49,13 @@ def get_time_sheets(work_date, job_code, page=1):
     current_user_id = current_user_details()['id']
     query_params = {'jobcode_ids': f'{job_code}',
                     'start_date': work_date.strftime('%Y-%m-%d'),
+                    'end_date': work_date.strftime('%Y-%m-%d'),
                     'supplemental_data': 'no',
                     'user_ids': f'{current_user_id}',
                     'page': page
                     }
+
+    LOGGER.debug(f'query_params: {query_params}')
 
     return _get('v1/timesheets', query_params)
 

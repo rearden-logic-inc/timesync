@@ -70,10 +70,25 @@ def time_entry_reader(date_value, configuration):
 
     time_entries = []
 
+    LOGGER.debug(f'processing values for date: {date_value}')
+
     while True:
         results = tsheets.get_time_sheets(date_value, jobcode, page=current_page)
 
-        for timesheet in results['results']['timesheets'].values():
+        LOGGER.debug(f'{results}')
+
+        timesheets = results['results']['timesheets']
+
+        if not timesheets:
+            LOGGER.info('No timesheets available for date: %s', date_value)
+            return time_entries
+
+        for timesheet in timesheets.values():
+
+            LOGGER.debug(f"timesheet: {timesheet}")
+
+            LOGGER.debug(f"start {timesheet['start']}")
+            LOGGER.debug(f"end {timesheet['end']}")
 
             timesheet_value = {
                 'start': dateutil.parser.parse(timesheet['start']),
