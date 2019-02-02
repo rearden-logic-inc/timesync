@@ -8,6 +8,8 @@ import sys
 from timesync.subcommands import task_assignments, process
 from timesync.utils import configuration
 
+LOGGER = logging.getLogger(__name__)
+
 
 def _build_arguments():
     parser = argparse.ArgumentParser(description='Time Sync Command')
@@ -37,7 +39,8 @@ def main():
             args.func(args)
         else:
             parser.print_help()
-    except RuntimeError:
+    except RuntimeError as rte:
+        LOGGER.error(rte)
         sys.exit(-1)
 
 

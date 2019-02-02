@@ -2,11 +2,14 @@
 Processes a script file of tasks.
 """
 import argparse
+import logging
 
 from ruamel.yaml import YAML
 
 from timesync.utils import plugins
 from timesync.utils.configuration import parse_date
+
+LOGGER = logging.getLogger(__name__)
 
 
 def create_argument_parser(subparser):
@@ -35,14 +38,13 @@ def _copy_processor(configuration):
     dates = parse_date(configuration)
 
     reader = plugins.load_plugin('timesheet_reader', configuration['from']['id'])
+    writer = plugins.load_plugin('timesheet_writer', configuration['to']['id'])
 
     results = []
     for date in dates:
         results += reader(date, configuration['from'])
 
-    print(f'{results}')
-
-    writer = plugins.load_plugin('timesheet_writer', configuration['to']['id'])
+    LOGGER.debug(f'Results : {results}')
 
     writer(configuration['to'], results)
 

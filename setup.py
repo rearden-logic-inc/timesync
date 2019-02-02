@@ -36,6 +36,7 @@ setup(
         'ruamel.yaml>=0.15.70<0.16',
         'tabulate>=0.8.2<0.9',
         'python-dateutil==2.7.5',
+        'pytz==2018.9'
     ],
 
     extras_require={
