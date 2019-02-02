@@ -108,6 +108,7 @@ def _get(api_path, query_parameters=None):
     headers = _get_headers()
     results = requests.get(f'{API_ROOT}/{api_path}', headers=headers, params=query_parameters)
 
+    # TODO: Need to handle error cases if the return value is not a 200
     return results.json()
 
 

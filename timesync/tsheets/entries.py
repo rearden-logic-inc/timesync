@@ -70,10 +70,29 @@ def time_entry_reader(date_value, configuration):
 
     time_entries = []
 
+    LOGGER.debug(f'processing values for date: {date_value}')
+
     while True:
         results = tsheets.get_time_sheets(date_value, jobcode, page=current_page)
 
-        for timesheet in results['results']['timesheets'].values():
+        LOGGER.debug(f'{results}')
+
+        timesheets = results['results']['timesheets']
+
+        if not timesheets:
+            LOGGER.info('No timesheets available for date: %s', date_value)
+            return time_entries
+
+        for timesheet in timesheets.values():
+
+            LOGGER.info(timesheet)
+
+            if not timesheet['start'] or not timesheet['end']:
+                LOGGER.warning('Record %s does not contain start or end time. Skipping..', timesheet['id'])
+                continue
+
+            if timesheet['on_the_clock']:
+                LOGGER.warning('Record %s is marked as on the clock.  Skipping..', timesheet['id'])
 
             timesheet_value = {
                 'start': dateutil.parser.parse(timesheet['start']),
