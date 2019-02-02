@@ -65,6 +65,9 @@ def _get(api_path, query_parameters=None):
     headers = _get_headers()
     results = requests.get(f'{API_ROOT}/{api_path}', headers=headers, params=query_parameters)
 
+    if results.status_code == 401:
+        raise RuntimeError(f'Error Access T-Sheets API: {results.json()["error_description"]}')
+
     return results.json()
 
 
