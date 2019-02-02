@@ -14,7 +14,7 @@ with open(path.join(LOCAL_PATH, 'README.rst'), encoding='utf-8') as f:
 
 setup(
     name='timesync',
-    version='0.2.0dev',
+    version='0.2.0',
     packages=find_packages(),
     url='https://github.com/rerobins/timesync',
     license='Apache 2',
