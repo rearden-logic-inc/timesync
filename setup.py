@@ -51,9 +51,11 @@ setup(
         'task_assignments': ['harvest=timesync.harvest.entries:task_assignments',
                              'tsheets=timesync.tsheets.entries:task_assignments', ],
 
-        'timesheet_reader': ['tsheets=timesync.tsheets.entries:time_entry_reader', ],
+        'timesheet_reader': ['tsheets=timesync.tsheets.entries:time_entry_reader',
+                             'disk=timesync.disk.entries:time_entry_reader'],
 
-        'timesheet_writer': ['harvest=timesync.harvest.entries:time_sheet_writer', ],
+        'timesheet_writer': ['harvest=timesync.harvest.entries:time_sheet_writer',
+                             'disk=timesync.disk.entries:time_sheet_writer'],
 
         'timesheet_delete': ['harvest=timesync.harvest.entries:time_sheet_delete', ],
     },

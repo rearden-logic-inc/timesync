@@ -91,6 +91,12 @@ def time_entry_reader(date_value, configuration):
 
             LOGGER.info(timesheet)
 
+            # Ignore all records where the record is marked as on the clock
+            if timesheet['on_the_clock']:
+                LOGGER.warning('Record %s is marked as on the clock.  Skipping..', timesheet['id'])
+                continue
+
+            # Check to see if the start and end time have to be generated
             if not timesheet['start'] or not timesheet['end']:
                 start_time, end_time = build_start_end_time(timesheet['date'], timesheet['duration'],
                                                             timesheet['tz_str'])
@@ -101,16 +107,12 @@ def time_entry_reader(date_value, configuration):
                 start_time = dateutil.parser.parse(timesheet['start'])
                 end_time = dateutil.parser.parse(timesheet['end'])
 
-            if timesheet['on_the_clock']:
-                LOGGER.warning('Record %s is marked as on the clock.  Skipping..', timesheet['id'])
-                continue
-
             timesheet_value = {
                 'id': timesheet['id'],
                 'start': start_time,
                 'end': end_time,
                 'duration': timesheet['duration'],
-                'date': timesheet['date'],
+                'date': datetime.datetime.strptime(timesheet['date'], '%Y-%m-%d').date(),
                 'notes': timesheet['notes']
             }
 
