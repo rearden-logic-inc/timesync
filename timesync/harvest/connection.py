@@ -3,6 +3,7 @@ Connection that handles the request wrapping along with any of the authenticatio
 """
 import functools
 import logging
+import time
 
 from timesync.utils import configuration as config
 
@@ -108,7 +109,13 @@ def _get(api_path, query_parameters=None):
     headers = _get_headers()
     results = requests.get(f'{API_ROOT}/{api_path}', headers=headers, params=query_parameters)
 
-    # TODO: Need to handle error cases if the return value is not a 200
+    if results.status_code == 401:
+        raise RuntimeError(f'Error Access Harvest API: {results.json()["error_description"]}')
+    elif results.status_code == 429:
+        LOGGER.warning('Rate Limit reached, sleeping for 15 seconds before re-running.')
+        time.sleep(15)
+        return _post(api_path, query_parameters)
+
     return results.json()
 
 
@@ -116,6 +123,14 @@ def _post(api_path, post_parameters=None):
     headers = _get_headers()
 
     results = requests.post(f'{API_ROOT}/{api_path}', headers=headers, json=post_parameters)
+
+    if results.status_code == 401:
+        raise RuntimeError(f'Error Access Harvest API: {results.json()["error_description"]}')
+    elif results.status_code == 429:
+        LOGGER.warning('Rate Limit reached, sleeping for 15 seconds before re-running.')
+        time.sleep(15)
+        return _post(api_path, post_parameters)
+
     return results.json()
 
 
