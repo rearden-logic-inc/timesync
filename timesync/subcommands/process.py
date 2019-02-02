@@ -5,6 +5,7 @@ import argparse
 import logging
 
 from ruamel.yaml import YAML
+from ruamel.yaml.parser import ParserError as YAMLParserError
 
 from timesync.utils import plugins
 from timesync.utils.configuration import parse_date
@@ -23,7 +24,10 @@ def create_argument_parser(subparser):
 def _main(args):
 
     parser = YAML(typ='rt')
-    tasks = parser.load(args.file)
+    try:
+        tasks = parser.load(args.file)
+    except YAMLParserError as ype:
+        raise RuntimeError(f'Cannot parse process file {args.file.name}, see {ype.problem_mark}')
 
     for task in tasks['tasks']:
 

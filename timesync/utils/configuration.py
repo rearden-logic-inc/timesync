@@ -6,6 +6,7 @@ import logging
 from datetime import datetime, timedelta
 
 from ruamel.yaml import YAML
+from ruamel.yaml.parser import ParserError as YAMLParserError
 
 _configuration = None
 LOGGER = logging.getLogger(__name__)
@@ -29,8 +30,9 @@ def get_configuration(configuration_path=DEFAULT_CONFIGURATION_FILE):
             with open(configuration_path) as configuration_file:
                 _configuration = parser.load(configuration_file)
         except FileNotFoundError:
-            LOGGER.error('Cannot find log file %s', configuration_path)
-            raise RuntimeError
+            raise RuntimeError(f'Cannot find configuration file {configuration_path}')
+        except YAMLParserError as ype:
+            raise RuntimeError(f'Cannot parse configuration file {configuration_path}, see {ype.problem_mark}')
 
     return _configuration
 
