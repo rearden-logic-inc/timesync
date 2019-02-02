@@ -85,10 +85,14 @@ def time_entry_reader(date_value, configuration):
 
         for timesheet in timesheets.values():
 
-            LOGGER.debug(f"timesheet: {timesheet}")
+            LOGGER.info(timesheet)
 
-            LOGGER.debug(f"start {timesheet['start']}")
-            LOGGER.debug(f"end {timesheet['end']}")
+            if not timesheet['start'] or not timesheet['end']:
+                LOGGER.warning('Record %s does not contain start or end time. Skipping..', timesheet['id'])
+                continue
+
+            if timesheet['on_the_clock']:
+                LOGGER.warning('Record %s is marked as on the clock.  Skipping..', timesheet['id'])
 
             timesheet_value = {
                 'start': dateutil.parser.parse(timesheet['start']),
