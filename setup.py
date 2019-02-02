@@ -14,7 +14,7 @@ with open(path.join(LOCAL_PATH, 'README.rst'), encoding='utf-8') as f:
 
 setup(
     name='timesync',
-    version='0.1.0',
+    version='0.2.0',
     packages=find_packages(),
     url='https://github.com/rerobins/timesync',
     license='Apache 2',
@@ -36,6 +36,7 @@ setup(
         'ruamel.yaml>=0.15.70<0.16',
         'tabulate>=0.8.2<0.9',
         'python-dateutil==2.7.5',
+        'pytz==2018.9'
     ],
 
     extras_require={
@@ -50,9 +51,11 @@ setup(
         'task_assignments': ['harvest=timesync.harvest.entries:task_assignments',
                              'tsheets=timesync.tsheets.entries:task_assignments', ],
 
-        'timesheet_reader': ['tsheets=timesync.tsheets.entries:time_entry_reader', ],
+        'timesheet_reader': ['tsheets=timesync.tsheets.entries:time_entry_reader',
+                             'disk=timesync.disk.entries:time_entry_reader'],
 
-        'timesheet_writer': ['harvest=timesync.harvest.entries:time_sheet_writer', ],
+        'timesheet_writer': ['harvest=timesync.harvest.entries:time_sheet_writer',
+                             'disk=timesync.disk.entries:time_sheet_writer'],
 
         'timesheet_delete': ['harvest=timesync.harvest.entries:time_sheet_delete', ],
     },

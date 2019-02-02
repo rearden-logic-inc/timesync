@@ -49,10 +49,13 @@ def get_time_sheets(work_date, job_code, page=1):
     current_user_id = current_user_details()['id']
     query_params = {'jobcode_ids': f'{job_code}',
                     'start_date': work_date.strftime('%Y-%m-%d'),
+                    'end_date': work_date.strftime('%Y-%m-%d'),
                     'supplemental_data': 'no',
                     'user_ids': f'{current_user_id}',
                     'page': page
                     }
+
+    LOGGER.debug(f'query_params: {query_params}')
 
     return _get('v1/timesheets', query_params)
 
@@ -61,6 +64,9 @@ def _get(api_path, query_parameters=None):
     """Retrieve data from the path provided."""
     headers = _get_headers()
     results = requests.get(f'{API_ROOT}/{api_path}', headers=headers, params=query_parameters)
+
+    if results.status_code == 401:
+        raise RuntimeError(f'Error Access T-Sheets API: {results.json()["error_description"]}')
 
     return results.json()
 

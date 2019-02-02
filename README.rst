@@ -15,7 +15,7 @@ Installation
   source env/bin/activate
 
   # Install timesync application
-  pip install pip install git+https://github.com/rerobins/timesync.git@master
+  pip install git+https://github.com/rerobins/timesync.git@master
 
 Configuration
 -------------
@@ -49,6 +49,12 @@ The configuration of the API tokens is located in a YAML file.  By default the f
     # Configuration details for the T-Sheets API
     t-sheets:
       token: <Your Token>
+
+  timeentries:
+
+    # Start time in 24 hour time.  This value is used to generate a start time
+    # if there is not a start time provided.
+    default_start_time: '08:00:00'
 
 Execution
 ---------
@@ -128,22 +134,28 @@ Example Process File
     from:
 
       # Required field that defines the API to use for reading.  Currently
-      # only tsheets reader is supported.
+      # only tsheets or disk reader is supported.
       id: tsheets
 
       # Required field if the id is set to tsheets.  This value can be
       # retrieved from the output of the task_assignment subcommand.
       jobcode: 34
 
+      # Required field if the id is set to disk.
+      # filename: some_file.yaml
+
     to:
 
       # Required field that defines the API to use for writing.  Currently only
-      # harvest writer is supported.
+      # harvest or disk writer is supported.
       id: harvest
 
       # See documentation on these fields provided in the delete section.
       project: 1
       task: 2
+
+      # Required field if the id is set to disk.
+      # filename: some_file.yaml
 
     # See the documentation on these fields provided in the delete section.
     date: today
@@ -155,6 +167,6 @@ Limitations
 
 This application is currently under development and has the following limitations:
 
-* Can only read time entry values from the T-Sheets API
-* Can only write time entry values to the Harvest API
+* Can only read time entry values from the T-Sheets API or from YAML formatted file
+* Can only write time entry values to the Harvest API or to YAML formatted file
 * Can only delete time entry values from the Harvest API
