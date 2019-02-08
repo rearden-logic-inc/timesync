@@ -82,7 +82,7 @@ def time_sheet_writer(configuration, records):
         raise RuntimeError('Harvest writer is not configured properly')
 
     for record in records:
-        notes = record['notes'] + "  -- Imported From TimeSync"
+        notes = record['notes']
         harvest.create_time_entry(project_id, task_id, record['start'], record['end'], notes)
 
 
