@@ -89,7 +89,7 @@ def time_entry_reader(date_value, configuration):
 
         for timesheet in timesheets.values():
 
-            LOGGER.info(timesheet)
+            LOGGER.debug(timesheet)
 
             # Ignore all records where the record is marked as on the clock
             if timesheet['on_the_clock']:
