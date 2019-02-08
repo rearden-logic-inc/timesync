@@ -82,8 +82,8 @@ def time_sheet_writer(configuration, records):
         raise RuntimeError('Harvest writer is not configured properly')
 
     for record in records:
-        notes = record['notes']
-        harvest.create_time_entry(project_id, task_id, record['start'], record['end'], notes)
+        LOGGER.info('Inserting record: %s -> %s [%s]', record['start'], record['end'], record['notes'])
+        harvest.create_time_entry(project_id, task_id, record['start'], record['end'], record['notes'])
 
 
 def time_sheet_delete(configuration, date):
@@ -117,7 +117,7 @@ def time_sheet_delete(configuration, date):
         if time_entry['task_assignment']['id'] in found_task_assignments:
             entries_to_delete.append(time_entry['id'])
 
-    LOGGER.debug('Entries to delete %s', entries_to_delete)
+    LOGGER.info('Entries to delete %s %s', date, entries_to_delete)
 
     for entry in entries_to_delete:
         if not harvest.delete_time_entry(entry):
