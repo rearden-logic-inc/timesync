@@ -15,7 +15,7 @@ Installation
   source env/bin/activate
 
   # Install timesync application
-  pip install git+https://github.com/rerobins/timesync.git@master
+  pip install git+https://github.com/rearden-logic-inc/timesync.git@master
 
 Configuration
 -------------
